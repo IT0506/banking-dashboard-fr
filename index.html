@@ -2,194 +2,1433 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Secure Banking Dashboard</title>
+
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 40px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h2 { color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-        .header-bar h2 { border-bottom: none; }
-        .card { background: #34495e; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
-        .balance-val { font-size: 32px; font-weight: bold; color: #2ecc71; }
-        input, button { padding: 12px; margin: 8px 0; width: 100%; box-sizing: border-box; border-radius: 6px; border: 1px solid #bdc3c7; }
-        button { background: #27ae60; color: white; font-weight: bold; cursor: pointer; border: none; }
-        button:hover { background: #219653; }
-        .logout-btn { background: #c0392b; width: auto; padding: 8px 16px; font-size: 14px; margin: 0; }
-        .logout-btn:hover { background: #a93226; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f2f2f2; }
-        .hidden { display: none; }
-        .toggle-link { color: #2980b9; cursor: pointer; text-align: center; display: block; margin-top: 15px; text-decoration: underline; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            margin: 0;
+            padding: 40px 20px;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .header-bar h2 {
+            border-bottom: none;
+            margin: 0;
+        }
+
+        .card {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .balance-val {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin-top: 5px;
+        }
+
+        input,
+        button {
+            padding: 12px;
+            margin: 8px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border: 1px solid #bdc3c7;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2980b9;
+        }
+
+        button {
+            background: #27ae60;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background: #219653;
+        }
+
+        button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .logout-btn {
+            background: #c0392b;
+            width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .logout-btn:hover {
+            background: #a93226;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-break: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .toggle-link {
+            color: #2980b9;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            margin-top: 15px;
+            text-decoration: underline;
+        }
+
+        .toggle-link:hover {
+            color: #1f6391;
+        }
+
+        .message {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .error-message {
+            background: #fce4e4;
+            color: #c0392b;
+            border: 1px solid #e5b7b7;
+        }
+
+        .success-message {
+            background: #e8f8f0;
+            color: #27ae60;
+            border: 1px solid #b7e4ca;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .header-bar {
+                align-items: flex-start;
+            }
+
+            .header-bar h2 {
+                font-size: 20px;
+            }
+
+            .logout-btn {
+                font-size: 12px;
+                padding: 7px 10px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 8px 5px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
 <div class="container">
-    <!-- AUTHENTICATION PANELS -->
+
+    <!-- ======================================================
+         AUTHENTICATION SECTION
+         ====================================================== -->
+
     <div id="authSection">
-        <!-- LOGIN VIEW -->
+
+        <!-- LOGIN -->
         <div id="loginCard">
+
             <h2>Secure User Authentication</h2>
-            <input type="text" id="loginUsername" placeholder="Username (e.g., alice)">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <button onclick="login()">Sign In</button>
-            <span class="toggle-link" onclick="toggleAuth(true)">New client? Register here</span>
+
+            <div
+                id="loginMessage"
+                class="message error-message"
+            ></div>
+
+            <input
+                type="text"
+                id="loginUsername"
+                placeholder="Username (e.g., alice)"
+                autocomplete="username"
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Password"
+                autocomplete="current-password"
+            >
+
+            <button
+                id="loginButton"
+                onclick="login()"
+            >
+                Sign In
+            </button>
+
+            <span
+                class="toggle-link"
+                onclick="toggleAuth(true)"
+            >
+                New client? Register here
+            </span>
+
         </div>
 
-        <!-- DYNAMIC REGISTER VIEW -->
-        <div id="registerCard" class="hidden">
-            <h2>Create New Custom Bank Account</h2>
-            <input type="text" id="regUsername" placeholder="Choose a Unique Username">
-            <input type="password" id="regPassword" placeholder="Choose a Secure Password">
-            <button onclick="register()" style="background:#2980b9;">Open Free Account (₹1,000 Starting Gift)</button>
-            <span class="toggle-link" onclick="toggleAuth(false)">Already a member? Sign In</span>
+
+        <!-- REGISTER -->
+        <div
+            id="registerCard"
+            class="hidden"
+        >
+
+            <h2>Create New Bank Account</h2>
+
+            <div
+                id="registerMessage"
+                class="message error-message"
+            ></div>
+
+            <input
+                type="text"
+                id="regUsername"
+                placeholder="Choose a Unique Username"
+                autocomplete="username"
+            >
+
+            <input
+                type="password"
+                id="regPassword"
+                placeholder="Choose a Secure Password"
+                autocomplete="new-password"
+            >
+
+            <button
+                id="registerButton"
+                onclick="register()"
+                style="background:#2980b9;"
+            >
+                Open Free Account (₹1,000 Starting Gift)
+            </button>
+
+            <span
+                class="toggle-link"
+                onclick="toggleAuth(false)"
+            >
+                Already a member? Sign In
+            </span>
+
         </div>
+
     </div>
 
-    <!-- MAIN DASHBOARD VIEW -->
-    <div id="dashboardSection" class="hidden">
+
+    <!-- ======================================================
+         DASHBOARD SECTION
+         ====================================================== -->
+
+    <div
+        id="dashboardSection"
+        class="hidden"
+    >
+
+        <!-- HEADER -->
+
         <div class="header-bar">
-            <h2>Welcome back, <span id="userDisplay" style="color:#2980b9;"></span>!</h2>
-            <button class="logout-btn" onclick="logout()">Secure Logout</button>
+
+            <h2>
+                Welcome back,
+                <span
+                    id="userDisplay"
+                    style="color:#2980b9;"
+                ></span>!
+            </h2>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Secure Logout
+            </button>
+
         </div>
-        
+
+
+        <!-- ACCOUNT CARD -->
+
         <div class="card">
-            <div>Account Number: <span id="accDisplay" style="font-weight:bold;"></span></div>
-            <div style="margin-top:10px;">Available Balance</div>
-            <div class="balance-val">₹<span id="balanceDisplay">0.00</span></div>
+
+            <div>
+                Account Number:
+                <span
+                    id="accDisplay"
+                    style="font-weight:bold;"
+                ></span>
+            </div>
+
+            <div style="margin-top:10px;">
+                Available Balance
+            </div>
+
+            <div class="balance-val">
+                ₹<span id="balanceDisplay">0.00</span>
+            </div>
+
         </div>
+
+
+        <!-- TRANSFER -->
 
         <h2>Fund Transfer</h2>
-        <input type="text" id="toAccount" placeholder="Destination Account Number (e.g., ACC1002)">
-        <input type="number" id="transferAmount" placeholder="Amount (₹)">
-        <button onclick="executeTransfer()" style="background:#e67e22;">Send Money</button>
+
+        <input
+            type="text"
+            id="toAccount"
+            placeholder="Destination Account Number (e.g., ACC12345)"
+        >
+
+        <input
+            type="number"
+            id="transferAmount"
+            placeholder="Amount (₹)"
+            min="0.01"
+            step="0.01"
+        >
+
+        <button
+            id="transferButton"
+            onclick="executeTransfer()"
+            style="background:#e67e22;"
+        >
+            Send Money
+        </button>
+
+
+        <!-- HISTORY -->
 
         <h2>Transaction History Audit Logs</h2>
+
         <table>
+
             <thead>
+
                 <tr>
                     <th>Timestamp</th>
                     <th>Source</th>
                     <th>Destination</th>
                     <th>Amount</th>
                 </tr>
+
             </thead>
+
             <tbody id="historyRows"></tbody>
+
         </table>
+
     </div>
+
 </div>
 
+
 <script>
-    let jwtToken = "";
-    let myAccountNumber = "";
+
+    /*
+     * =========================================================
+     * PRODUCTION BACKEND URL
+     * =========================================================
+     *
+     * Your Spring Boot backend is deployed on Render.
+     *
+     * DO NOT use:
+     *
+     * http://localhost:8080
+     *
+     * because GitHub Pages cannot access your local computer.
+     */
+
+    const API_BASE_URL =
+        "https://banking-dashboard-3666.onrender.com";
+
+
+    /*
+     * =========================================================
+     * JWT / ACCOUNT STATE
+     * =========================================================
+     */
+
+    let jwtToken =
+        sessionStorage.getItem("bankingJwtToken") || "";
+
+    let myAccountNumber =
+        sessionStorage.getItem("bankingAccountNumber") || "";
+
+
+    /*
+     * =========================================================
+     * AUTH TOGGLE
+     * =========================================================
+     */
 
     function toggleAuth(showRegister) {
-        if(showRegister) {
-            document.getElementById("loginCard").classList.add("hidden");
-            document.getElementById("registerCard").classList.remove("hidden");
+
+        const loginCard =
+            document.getElementById("loginCard");
+
+        const registerCard =
+            document.getElementById("registerCard");
+
+        clearMessages();
+
+        if (showRegister) {
+
+            loginCard.classList.add("hidden");
+
+            registerCard.classList.remove("hidden");
+
         } else {
-            document.getElementById("registerCard").classList.add("hidden");
-            document.getElementById("loginCard").classList.remove("hidden");
+
+            registerCard.classList.add("hidden");
+
+            loginCard.classList.remove("hidden");
         }
     }
 
-    async function register() {
-        const u = document.getElementById("regUsername").value;
-        const p = document.getElementById("regPassword").value;
-        if(!u || !p) { alert("Fields cannot be empty."); return; }
-        
-        try {
-            const res = await fetch("http://localhost:8080/api/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: u, password: p })
-            });
-            const message = await res.text();
-            if(!res.ok) throw new Error(message);
-            
-            alert(message); // Displays generation success and assigned account string
-            toggleAuth(false); // Toggle view to log them in
-            document.getElementById("loginUsername").value = u;
-        } catch (err) { alert("⚠️ Registration Failed: " + err.message); }
+
+    /*
+     * =========================================================
+     * MESSAGE HELPERS
+     * =========================================================
+     */
+
+    function showMessage(elementId, message) {
+
+        const element =
+            document.getElementById(elementId);
+
+        element.textContent = message;
+
+        element.style.display = "block";
     }
+
+
+    function hideMessage(elementId) {
+
+        const element =
+            document.getElementById(elementId);
+
+        element.textContent = "";
+
+        element.style.display = "none";
+    }
+
+
+    function clearMessages() {
+
+        hideMessage("loginMessage");
+
+        hideMessage("registerMessage");
+    }
+
+
+    /*
+     * =========================================================
+     * API ERROR HELPER
+     * =========================================================
+     */
+
+    async function getErrorMessage(response) {
+
+        try {
+
+            const text =
+                await response.text();
+
+            return text ||
+                `Request failed with status ${response.status}`;
+
+        } catch (error) {
+
+            return `Request failed with status ${response.status}`;
+        }
+    }
+
+
+    /*
+     * =========================================================
+     * REGISTER
+     * =========================================================
+     */
+
+    async function register() {
+
+        clearMessages();
+
+        const username =
+            document.getElementById("regUsername").value.trim();
+
+        const password =
+            document.getElementById("regPassword").value;
+
+
+        if (!username || !password) {
+
+            showMessage(
+                "registerMessage",
+                "Username and password cannot be empty."
+            );
+
+            return;
+        }
+
+
+        if (password.length < 6) {
+
+            showMessage(
+                "registerMessage",
+                "Password should contain at least 6 characters."
+            );
+
+            return;
+        }
+
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        registerButton.disabled = true;
+
+        registerButton.textContent =
+            "Creating Account...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/auth/register`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    }
+                );
+
+
+            const message =
+                await response.text();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    message ||
+                    `Registration failed (${response.status})`
+                );
+            }
+
+
+            alert(message);
+
+
+            /*
+             * Put username into login form.
+             */
+
+            document.getElementById(
+                "loginUsername"
+            ).value = username;
+
+
+            document.getElementById(
+                "loginPassword"
+            ).value = "";
+
+
+            /*
+             * Switch to login screen.
+             */
+
+            toggleAuth(false);
+
+
+        } catch (error) {
+
+            console.error(
+                "Registration error:",
+                error
+            );
+
+            showMessage(
+                "registerMessage",
+                "Registration Failed: " +
+                error.message
+            );
+
+        } finally {
+
+            registerButton.disabled = false;
+
+            registerButton.textContent =
+                "Open Free Account (₹1,000 Starting Gift)";
+        }
+    }
+
+
+    /*
+     * =========================================================
+     * LOGIN
+     * =========================================================
+     */
 
     async function login() {
-        const u = document.getElementById("loginUsername").value;
-        const p = document.getElementById("loginPassword").value;
+
+        clearMessages();
+
+        const username =
+            document.getElementById("loginUsername")
+                .value.trim();
+
+        const password =
+            document.getElementById("loginPassword")
+                .value;
+
+
+        if (!username || !password) {
+
+            showMessage(
+                "loginMessage",
+                "Please enter username and password."
+            );
+
+            return;
+        }
+
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+            "Signing In...";
+
+
         try {
-            const res = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: u, password: p })
-            });
-            const text = await res.text();
-            if(!res.ok) throw new Error(text);
-            jwtToken = text;
-            
-            document.getElementById("authSection").classList.add("hidden");
-            document.getElementById("dashboardSection").classList.remove("hidden");
-            document.getElementById("userDisplay").innerText = u;
-            
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/auth/login`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    }
+                );
+
+
+            const token =
+                await response.text();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    token ||
+                    `Login failed (${response.status})`
+                );
+            }
+
+
+            if (!token || token.length < 20) {
+
+                throw new Error(
+                    "Backend returned an invalid JWT token."
+                );
+            }
+
+
+            /*
+             * Store JWT for the current browser session.
+             */
+
+            jwtToken = token;
+
+            sessionStorage.setItem(
+                "bankingJwtToken",
+                jwtToken
+            );
+
+
+            /*
+             * Display dashboard.
+             */
+
+            document.getElementById(
+                "authSection"
+            ).classList.add("hidden");
+
+
+            document.getElementById(
+                "dashboardSection"
+            ).classList.remove("hidden");
+
+
+            document.getElementById(
+                "userDisplay"
+            ).textContent = username;
+
+
+            /*
+             * Load account information.
+             */
+
             await updateDashboard();
-        } catch (err) { alert("Login Error: " + err.message); }
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+            showMessage(
+                "loginMessage",
+                "Login Error: " +
+                error.message
+            );
+
+        } finally {
+
+            loginButton.disabled = false;
+
+            loginButton.textContent =
+                "Sign In";
+        }
     }
 
+
+    /*
+     * =========================================================
+     * LOGOUT
+     * =========================================================
+     */
+
     function logout() {
-        jwtToken = ""; myAccountNumber = "";
-        document.getElementById("loginUsername").value = "";
-        document.getElementById("loginPassword").value = "";
-        document.getElementById("regUsername").value = "";
-        document.getElementById("regPassword").value = "";
-        document.getElementById("dashboardSection").classList.add("hidden");
-        document.getElementById("authSection").classList.remove("hidden");
+
+        jwtToken = "";
+
+        myAccountNumber = "";
+
+
+        sessionStorage.removeItem(
+            "bankingJwtToken"
+        );
+
+        sessionStorage.removeItem(
+            "bankingAccountNumber"
+        );
+
+
+        document.getElementById(
+            "loginUsername"
+        ).value = "";
+
+        document.getElementById(
+            "loginPassword"
+        ).value = "";
+
+        document.getElementById(
+            "regUsername"
+        ).value = "";
+
+        document.getElementById(
+            "regPassword"
+        ).value = "";
+
+        document.getElementById(
+            "toAccount"
+        ).value = "";
+
+        document.getElementById(
+            "transferAmount"
+        ).value = "";
+
+
+        document.getElementById(
+            "dashboardSection"
+        ).classList.add("hidden");
+
+
+        document.getElementById(
+            "authSection"
+        ).classList.remove("hidden");
+
+
+        document.getElementById(
+            "historyRows"
+        ).innerHTML = "";
+
+
         toggleAuth(false);
     }
 
-    async function updateDashboard() {
-        const res = await fetch("http://localhost:8080/api/banking/balance", {
-            headers: { "Authorization": "Bearer " + jwtToken }
-        });
-        const accountData = await res.json();
-        myAccountNumber = accountData.accountNumber;
-        
-        document.getElementById("accDisplay").innerText = myAccountNumber;
-        document.getElementById("balanceDisplay").innerText = parseFloat(accountData.balance).toFixed(2);
-        
-        const histRes = await fetch(`http://localhost:8080/api/banking/history?accountNumber=${myAccountNumber}`, {
-            headers: { "Authorization": "Bearer " + jwtToken }
-        });
-        const historyData = await histRes.json();
-        
-        let rows = "";
-        historyData.forEach(tx => {
-            rows += `<tr>
-                <td>${tx.timestamp.replace("T", " ")}</td>
-                <td>${tx.sourceAccount}</td>
-                <td>${tx.destinationAccount}</td>
-                <td style="color:${tx.sourceAccount === myAccountNumber ? 'red':'green'}">
-                    ${tx.sourceAccount === myAccountNumber ? '-':'+'}₹${parseFloat(tx.amount).toFixed(2)}
-                </td>
-            </tr>`;
-        });
-        document.getElementById("historyRows").innerHTML = rows;
+
+    /*
+     * =========================================================
+     * HANDLE UNAUTHORIZED JWT
+     * =========================================================
+     */
+
+    function handleUnauthorized() {
+
+        alert(
+            "Your login session has expired or is invalid. Please sign in again."
+        );
+
+        logout();
     }
 
-    async function executeTransfer() {
-        const to = document.getElementById("toAccount").value;
-        const amt = document.getElementById("transferAmount").value;
-        if (!to || !amt || amt <= 0) { alert("Enter valid parameters."); return; }
+
+    /*
+     * =========================================================
+     * UPDATE DASHBOARD
+     * =========================================================
+     */
+
+    async function updateDashboard() {
+
+        if (!jwtToken) {
+
+            handleUnauthorized();
+
+            return;
+        }
+
+
         try {
-            const res = await fetch(`http://localhost:8080/api/banking/transfer?from=${myAccountNumber}&to=${to}&amount=${amt}`, {
-                method: "POST",
-                headers: { "Authorization": "Bearer " + jwtToken }
-            });
-            const text = await res.text();
-            if(!res.ok) throw new Error(text);
-            alert(text);
-            await updateDashboard();
-        } catch (err) { alert("⚠️ Error: " + err.message); }
+
+            /*
+             * -------------------------------------------------
+             * GET BALANCE / ACCOUNT
+             * -------------------------------------------------
+             */
+
+            const balanceResponse =
+                await fetch(
+                    `${API_BASE_URL}/api/banking/balance`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + jwtToken
+                        }
+                    }
+                );
+
+
+            if (balanceResponse.status === 401) {
+
+                handleUnauthorized();
+
+                return;
+            }
+
+
+            if (!balanceResponse.ok) {
+
+                const error =
+                    await getErrorMessage(
+                        balanceResponse
+                    );
+
+                throw new Error(error);
+            }
+
+
+            const accountData =
+                await balanceResponse.json();
+
+
+            myAccountNumber =
+                accountData.accountNumber;
+
+
+            sessionStorage.setItem(
+                "bankingAccountNumber",
+                myAccountNumber
+            );
+
+
+            document.getElementById(
+                "accDisplay"
+            ).textContent =
+                myAccountNumber;
+
+
+            const balance =
+                Number(accountData.balance || 0);
+
+
+            document.getElementById(
+                "balanceDisplay"
+            ).textContent =
+                balance.toFixed(2);
+
+
+            /*
+             * -------------------------------------------------
+             * GET TRANSACTION HISTORY
+             * -------------------------------------------------
+             */
+
+            const historyResponse =
+                await fetch(
+                    `${API_BASE_URL}/api/banking/history?accountNumber=${encodeURIComponent(myAccountNumber)}`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + jwtToken
+                        }
+                    }
+                );
+
+
+            if (historyResponse.status === 401) {
+
+                handleUnauthorized();
+
+                return;
+            }
+
+
+            if (!historyResponse.ok) {
+
+                const error =
+                    await getErrorMessage(
+                        historyResponse
+                    );
+
+                throw new Error(error);
+            }
+
+
+            const historyData =
+                await historyResponse.json();
+
+
+            renderHistory(historyData);
+
+
+        } catch (error) {
+
+            console.error(
+                "Dashboard error:",
+                error
+            );
+
+            alert(
+                "Unable to load dashboard: " +
+                error.message
+            );
+        }
     }
+
+
+    /*
+     * =========================================================
+     * RENDER TRANSACTION HISTORY
+     * =========================================================
+     */
+
+    function renderHistory(historyData) {
+
+        const historyRows =
+            document.getElementById(
+                "historyRows"
+            );
+
+
+        historyRows.innerHTML = "";
+
+
+        if (!Array.isArray(historyData) ||
+            historyData.length === 0) {
+
+            historyRows.innerHTML = `
+                <tr>
+                    <td
+                        colspan="4"
+                        class="empty-history"
+                    >
+                        No transactions found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        historyData.forEach(
+            function (transaction) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                /*
+                 * Timestamp
+                 */
+
+                const timestampCell =
+                    document.createElement("td");
+
+                timestampCell.textContent =
+                    formatTimestamp(
+                        transaction.timestamp
+                    );
+
+
+                /*
+                 * Source
+                 */
+
+                const sourceCell =
+                    document.createElement("td");
+
+                sourceCell.textContent =
+                    transaction.sourceAccount || "-";
+
+
+                /*
+                 * Destination
+                 */
+
+                const destinationCell =
+                    document.createElement("td");
+
+                destinationCell.textContent =
+                    transaction.destinationAccount || "-";
+
+
+                /*
+                 * Amount
+                 */
+
+                const amountCell =
+                    document.createElement("td");
+
+
+                const amount =
+                    Number(transaction.amount || 0);
+
+
+                const isOutgoing =
+                    transaction.sourceAccount ===
+                    myAccountNumber;
+
+
+                amountCell.textContent =
+                    `${isOutgoing ? "-" : "+"}₹${amount.toFixed(2)}`;
+
+
+                amountCell.style.color =
+                    isOutgoing
+                        ? "red"
+                        : "green";
+
+
+                row.appendChild(timestampCell);
+
+                row.appendChild(sourceCell);
+
+                row.appendChild(destinationCell);
+
+                row.appendChild(amountCell);
+
+                historyRows.appendChild(row);
+            }
+        );
+    }
+
+
+    /*
+     * =========================================================
+     * FORMAT TIMESTAMP
+     * =========================================================
+     */
+
+    function formatTimestamp(timestamp) {
+
+        if (!timestamp) {
+
+            return "-";
+        }
+
+
+        try {
+
+            return String(timestamp)
+                .replace("T", " ")
+                .substring(0, 19);
+
+        } catch (error) {
+
+            return String(timestamp);
+        }
+    }
+
+
+    /*
+     * =========================================================
+     * TRANSFER
+     * =========================================================
+     */
+
+    async function executeTransfer() {
+
+        if (!jwtToken) {
+
+            handleUnauthorized();
+
+            return;
+        }
+
+
+        const destinationAccount =
+            document.getElementById(
+                "toAccount"
+            ).value.trim();
+
+
+        const amount =
+            document.getElementById(
+                "transferAmount"
+            ).value;
+
+
+        if (!destinationAccount) {
+
+            alert(
+                "Please enter the destination account number."
+            );
+
+            return;
+        }
+
+
+        if (!amount ||
+            Number(amount) <= 0) {
+
+            alert(
+                "Please enter a valid transfer amount."
+            );
+
+            return;
+        }
+
+
+        if (!myAccountNumber) {
+
+            alert(
+                "Your account information has not loaded yet."
+            );
+
+            return;
+        }
+
+
+        if (
+            destinationAccount ===
+            myAccountNumber
+        ) {
+
+            alert(
+                "You cannot transfer money to your own account."
+            );
+
+            return;
+        }
+
+
+        const transferButton =
+            document.getElementById(
+                "transferButton"
+            );
+
+
+        transferButton.disabled = true;
+
+        transferButton.textContent =
+            "Processing Transfer...";
+
+
+        try {
+
+            /*
+             * IMPORTANT:
+             *
+             * encodeURIComponent() protects account
+             * numbers and other query parameters.
+             */
+
+            const transferUrl =
+                `${API_BASE_URL}/api/banking/transfer` +
+                `?from=${encodeURIComponent(myAccountNumber)}` +
+                `&to=${encodeURIComponent(destinationAccount)}` +
+                `&amount=${encodeURIComponent(amount)}`;
+
+
+            const response =
+                await fetch(
+                    transferUrl,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + jwtToken
+                        }
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                handleUnauthorized();
+
+                return;
+            }
+
+
+            const message =
+                await response.text();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    message ||
+                    `Transfer failed (${response.status})`
+                );
+            }
+
+
+            alert(
+                message || "Transfer successful!"
+            );
+
+
+            /*
+             * Clear transfer form.
+             */
+
+            document.getElementById(
+                "toAccount"
+            ).value = "";
+
+            document.getElementById(
+                "transferAmount"
+            ).value = "";
+
+
+            /*
+             * Refresh balance and history.
+             */
+
+            await updateDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "Transfer error:",
+                error
+            );
+
+            alert(
+                "⚠️ Transfer Error: " +
+                error.message
+            );
+
+        } finally {
+
+            transferButton.disabled = false;
+
+            transferButton.textContent =
+                "Send Money";
+        }
+    }
+
+
+    /*
+     * =========================================================
+     * RESTORE SESSION AFTER PAGE REFRESH
+     * =========================================================
+     */
+
+    async function restoreSession() {
+
+        if (!jwtToken) {
+
+            return;
+        }
+
+
+        try {
+
+            document.getElementById(
+                "authSection"
+            ).classList.add("hidden");
+
+
+            document.getElementById(
+                "dashboardSection"
+            ).classList.remove("hidden");
+
+
+            /*
+             * The username is inside the JWT.
+             *
+             * We don't decode it here because the backend
+             * remains the authority for authentication.
+             *
+             * The account endpoint will verify the JWT.
+             */
+
+            await updateDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "Session restoration failed:",
+                error
+            );
+
+            logout();
+        }
+    }
+
+
+    /*
+     * =========================================================
+     * START APPLICATION
+     * =========================================================
+     */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            restoreSession();
+
+        }
+    );
+
 </script>
+
 </body>
 </html>
